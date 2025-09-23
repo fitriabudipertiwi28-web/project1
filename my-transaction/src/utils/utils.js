@@ -1,5 +1,5 @@
 // Format angka pakai koma (1,000,000)
-export const NumberWithCommas = (x) => {
+export const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
