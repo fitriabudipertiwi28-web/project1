@@ -1,7 +1,6 @@
-import Hasil from './Hasil'
-import ListCategory from './ListCategory'
-import NavbarComp from './navbar'
-import Menus from './Menus'
-import { Navbar } from 'react-bootstrap'
+import Hasil from "./Hasil";
+import ListCategory from "./ListCategory";
+import NavbarComp from "./NavbarComp";
+import Menus from "./Menus";
 
-export default {Hasil,ListCategory,NavbarComp, Menus}
+export {Hasil, ListCategory, NavbarComp, Menus};
