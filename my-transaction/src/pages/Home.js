@@ -1,8 +1,8 @@
 // import './App.css';
-/*import React, { Component } from "react";
+import React, { Component } from "react";
 import { Row, Col, Container } from "react-bootstrap";
-import { Hasil, ListCategory, Menus, NavbarComp } from "./component";
-import { API_URL } from "./utils/constants";
+import { Hasil, ListCategory, Menus } from "../component";
+import { API_URL } from "../utils/constants";
 import axios from "axios";
 import swal from "sweetalert";
 
@@ -111,24 +111,59 @@ export default class App extends Component {
       .catch((error) => {
         console.log(error);
       });
+      
   };
- hapusKeranjang = (id) => {
-  axios.delete(`${API_URL}keranjangs/${id}`) // ✅ pakai keranjangs plural
-    .then(() => {
-      swal({
-        title: "Sukses!",
-        text: "Item berhasil dihapus dari keranjang",
-        icon: "success",
-        button: false,
-        timer: 1200,
-      });
-      // ✅ update state yang benar
-      this.setState({
-        keranjangs: this.state.keranjangs.filter(item => item.id !== id)
-      });
+// hapus keranjang
+hapusKeranjang = (id) => {
+  axios
+    .get(API_URL + "keranjangs/" + id)
+    .then((res) => {
+      const keranjang = res.data;
+
+      if (keranjang.jumlah > 1) {
+        // kalau lebih dari 1, kurangi jumlah
+        const keranjangUpdate = {
+          ...keranjang,
+          jumlah: keranjang.jumlah - 1,
+          total_harga: keranjang.total_harga - keranjang.product.harga,
+        };
+
+        axios
+          .put(API_URL + "keranjangs/" + id, keranjangUpdate)
+          .then(() => {
+            swal({
+              title: "Berhasil!",
+              text: "Jumlah produk dikurangi 1",
+              icon: "info",
+              button: false,
+              timer: 1000,
+            });
+            this.getListKeranjang(); // refresh data
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // kalau jumlah 1, hapus item
+        axios
+          .delete(API_URL + "keranjangs/" + id)
+          .then(() => {
+            swal({
+              title: "Terhapus!",
+              text: "Produk dihapus dari keranjang",
+              icon: "error",
+              button: false,
+              timer: 1000,
+            });
+            this.getListKeranjang(); // refresh data
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     })
-    .catch(error => {
-      console.error("❌ Error hapus keranjang:", error);
+    .catch((error) => {
+      console.log(error);
     });
 
 };
@@ -136,7 +171,6 @@ export default class App extends Component {
     const { menus, categoryYangDipilih, keranjangs } = this.state;
     return (
       <div className="App">
-        <NavbarComp />
         <div className="mt-3">
           <Container fluid>
             <Row>
@@ -163,34 +197,11 @@ export default class App extends Component {
               <Hasil 
               keranjangs={keranjangs}
               hapusKeranjang={this.hapusKeranjang} 
-              />
+              />s
             </Row>
           </Container>
         </div>
       </div>
     );
   }
-} 
-*/
-import { BrowserRouter, Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
-import { NavbarComp } from "./component";
-import { Home } from "./pages/index";
-import { Sukses } from "./pages/index";
-import RekapPesanan from './pages/RekapPesanan';
-
-
-function App(){
-  return (
-    <BrowserRouter>
-      <NavbarComp />
-    <main>
-    <Switch>
-        <Route path ="/"component={Home} exact/>
-        <Route path ="/Sukses"component={Sukses} exact/>
-        <Route path ="/RekapPesanan"component={RekapPesanan} exact/>
-    </Switch>
-    </main>
-    </BrowserRouter>
-  );
 }
-export default App;
