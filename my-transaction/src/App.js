@@ -177,6 +177,7 @@ import { NavbarComp } from "./component";
 import { Home } from "./pages/index";
 import { Sukses } from "./pages/index";
 import RekapPesanan from './pages/RekapPesanan';
+import { Stok } from "./pages/index";
 
 
 function App(){
@@ -188,6 +189,7 @@ function App(){
         <Route path ="/"component={Home} exact/>
         <Route path ="/Sukses"component={Sukses} exact/>
         <Route path ="/RekapPesanan"component={RekapPesanan} exact/>
+        <Route path="/Stok" component={Stok} exact/>
     </Switch>
     </main>
     </BrowserRouter>
